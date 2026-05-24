@@ -59,9 +59,9 @@ const productSchema = z.object({
   published: z.coerce.boolean().optional(),
   details: z.string().optional(), // separado por líneas
   images: z.string().optional(),  // URLs separadas por líneas
-  pdf_url: z
-    .union([z.string().url("Debe ser una URL válida"), z.literal("")])
-    .optional(),
+  // Path interno dentro del bucket privado `product-pdfs` (no URL pública).
+  // Lo genera el PdfUploader; aquí solo validamos forma básica.
+  pdf_url: z.string().max(255, "Path demasiado largo").optional(),
 });
 
 // Shape de retorno del server action. `null` = idle (sin submit todavía).
@@ -213,6 +213,73 @@ export async function deleteProduct(id: string) {
   revalidatePath("/admin/productos");
   revalidatePath("/catalogo");
   return { ok: true };
+}
+
+// ------------------------------------------------------------
+// Upload de PDF de producto digital al bucket PRIVADO `product-pdfs`.
+// Usa service_role para bypassear cualquier policy de storage y porque
+// el bucket no debe ser legible públicamente — los clientes descargan
+// vía /api/download/[token] con URL firmada.
+// ------------------------------------------------------------
+
+const PDF_MAX_BYTES = 20 * 1024 * 1024; // 20 MB
+
+export type UploadPdfResult =
+  | { ok: true; path: string; filename: string }
+  | { ok: false; error: string };
+
+export async function uploadProductPdf(
+  formData: FormData
+): Promise<UploadPdfResult> {
+  await requireAdmin();
+
+  const file = formData.get("file");
+  if (!(file instanceof File)) {
+    return { ok: false, error: "No se recibió ningún archivo" };
+  }
+  if (file.type !== "application/pdf") {
+    return { ok: false, error: "Solo se aceptan archivos PDF" };
+  }
+  if (file.size > PDF_MAX_BYTES) {
+    return { ok: false, error: "El PDF no puede pesar más de 20 MB" };
+  }
+
+  const service = createServiceClient();
+  // Path con timestamp + random para evitar colisiones y dificultar guessing.
+  // Bucket es privado, igual no es URL adivinable, pero por higiene.
+  const safeStem = file.name
+    .replace(/\.pdf$/i, "")
+    .normalize("NFD")
+    .replace(/[̀-ͯ]/g, "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "")
+    .slice(0, 40) || "patron";
+  const path = `${Date.now()}-${Math.random()
+    .toString(36)
+    .slice(2, 8)}-${safeStem}.pdf`;
+
+  const { error } = await service.storage
+    .from("product-pdfs")
+    .upload(path, file, {
+      contentType: "application/pdf",
+      upsert: false,
+    });
+
+  if (error) {
+    return { ok: false, error: error.message };
+  }
+
+  return { ok: true, path, filename: file.name };
+}
+
+// Borra un PDF del bucket. Best-effort: ignora errores para no bloquear
+// al usuario si la operación de Storage falla.
+export async function deleteProductPdf(path: string): Promise<void> {
+  await requireAdmin();
+  if (!path) return;
+  const service = createServiceClient();
+  await service.storage.from("product-pdfs").remove([path]);
 }
 
 // ============================================================

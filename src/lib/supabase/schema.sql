@@ -76,12 +76,17 @@ create table if not exists orders (
   mp_preference_id text,
   mp_payment_id text,
   mp_status text,
+  -- Token único para autorizar la descarga del PDF tras el pago.
+  -- Se genera automático al crear la orden; el webhook lo manda por email.
+  download_token uuid unique default uuid_generate_v4(),
+  download_count int not null default 0,
   created_at timestamptz default now(),
   updated_at timestamptz default now()
 );
 
 create index if not exists orders_status_idx on orders(status);
 create index if not exists orders_created_idx on orders(created_at desc);
+create index if not exists orders_download_token_idx on orders(download_token);
 
 create table if not exists order_items (
   id uuid primary key default uuid_generate_v4(),

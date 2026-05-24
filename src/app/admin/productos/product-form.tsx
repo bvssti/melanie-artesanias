@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
 import { saveProduct, type ProductFormState } from "../actions";
 import { ImageUploader } from "./image-uploader";
+import { PdfUploader } from "./pdf-uploader";
 
 interface ProductFormProps {
   product?: {
@@ -63,12 +64,16 @@ export function ProductForm({ product, categories }: ProductFormProps) {
   const [slug, setSlug] = useState(initial.slug ?? "");
   const slugTouched = useRef(!!initial.slug);
 
+  // `type` controlado para mostrar/ocultar el PdfUploader.
+  const [type, setType] = useState(initial.type || "physical");
+
   // Re-sync cuando llega un nuevo `state` (echo del server tras error).
   useEffect(() => {
     if (state?.values) {
       setName(state.values.name ?? "");
       setSlug(state.values.slug ?? "");
       slugTouched.current = !!state.values.slug;
+      if (state.values.type) setType(state.values.type);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state]);
@@ -196,7 +201,8 @@ export function ProductForm({ product, categories }: ProductFormProps) {
               id="type"
               name="type"
               required
-              defaultValue={initial.type || "physical"}
+              value={type}
+              onChange={(e) => setType(e.currentTarget.value)}
               className="h-12 w-full rounded-full border border-border bg-bg-card px-5 text-[15px] focus:outline-3 focus:outline-accent focus:outline-offset-2"
             >
               <option value="physical">Físico (con envío)</option>
@@ -259,20 +265,16 @@ export function ProductForm({ product, categories }: ProductFormProps) {
             disabled={pending}
           />
         </Field>
-        <Field
-          error={fieldErrors.pdf_url}
-          hint="Solo para patrones digitales."
-        >
-          <Label htmlFor="pdf_url">URL del PDF</Label>
-          <Input
-            id="pdf_url"
-            name="pdf_url"
-            type="url"
-            defaultValue={initial.pdf_url}
-            placeholder="https://xxx.supabase.co/storage/v1/object/sign/..."
-            aria-invalid={!!fieldErrors.pdf_url}
-          />
-        </Field>
+        {type === "digital" && (
+          <Field error={fieldErrors.pdf_url}>
+            <Label>PDF del patrón</Label>
+            <PdfUploader
+              initialPath={initial.pdf_url ?? ""}
+              name="pdf_url"
+              disabled={pending}
+            />
+          </Field>
+        )}
       </Section>
 
       <Section title="Visibilidad">
