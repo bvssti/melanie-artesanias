@@ -17,13 +17,37 @@ export async function generateStaticParams() {
   return slugs.map((slug) => ({ slug }));
 }
 
+// Wrapper defensivo: si la query lanza (ej. caída transitoria de Supabase),
+// devolvemos null en vez de propagar el throw y crashear con 500. El page
+// trata null como "no encontrado" y muestra el 404.
+async function safeFetchProductBySlug(slug: string) {
+  try {
+    return await fetchProductBySlug(slug);
+  } catch (err) {
+    console.error("[producto/[slug]] fetchProductBySlug threw:", err);
+    return null;
+  }
+}
+
+async function safeFetchRelatedProducts(
+  categorySlug: string,
+  excludeId: string
+) {
+  try {
+    return await fetchRelatedProducts(categorySlug, excludeId);
+  } catch (err) {
+    console.error("[producto/[slug]] fetchRelatedProducts threw:", err);
+    return [];
+  }
+}
+
 export async function generateMetadata({
   params,
 }: {
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const product = await fetchProductBySlug(slug);
+  const product = await safeFetchProductBySlug(slug);
   if (!product)
     return { title: "Producto no encontrado — Artesanías Melanie" };
   return {
@@ -38,10 +62,10 @@ export default async function ProductoPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const product = await fetchProductBySlug(slug);
+  const product = await safeFetchProductBySlug(slug);
   if (!product) notFound();
 
-  const related = await fetchRelatedProducts(product.category, product.id);
+  const related = await safeFetchRelatedProducts(product.category, product.id);
 
   return (
     <>

@@ -1,6 +1,13 @@
-// Capa de acceso a datos contra Supabase.
-// Las pages la consumen para no tocar el cliente directamente.
-import { createAnonClient, createServerSupabase } from "./server";
+// Capa de acceso a datos contra Supabase para lecturas PÚBLICAS.
+//
+// Importante: usamos `createAnonClient` (sin cookies) en todas las queries
+// porque estas pages son prerenderizadas — `generateStaticParams` y
+// `generateMetadata` corren fuera del request scope, donde `cookies()` tira
+// "called outside a request scope" y crashea con 500.
+//
+// La RLS policy "public read published products" autoriza estos selects con
+// la anon key, así que no perdemos seguridad.
+import { createAnonClient } from "./server";
 import type { CategoryColor, ProductType } from "./types";
 import type { Product } from "@/data/products";
 import type { Category } from "@/data/categories";
@@ -43,7 +50,8 @@ function rowToProduct(row: {
 }
 
 export async function fetchCategories(): Promise<Category[]> {
-  const supabase = await createServerSupabase();
+  const supabase = createAnonClient();
+  if (!supabase) return [];
   const { data, error } = await supabase
     .from("categories")
     .select("slug, name, description, color, icon")
@@ -59,7 +67,8 @@ export async function fetchCategories(): Promise<Category[]> {
 }
 
 export async function fetchProducts(): Promise<Product[]> {
-  const supabase = await createServerSupabase();
+  const supabase = createAnonClient();
+  if (!supabase) return [];
   const { data, error } = await supabase
     .from("products")
     .select(
@@ -72,7 +81,8 @@ export async function fetchProducts(): Promise<Product[]> {
 }
 
 export async function fetchFeaturedProducts(): Promise<Product[]> {
-  const supabase = await createServerSupabase();
+  const supabase = createAnonClient();
+  if (!supabase) return [];
   const { data, error } = await supabase
     .from("products")
     .select(
@@ -89,7 +99,8 @@ export async function fetchFeaturedProducts(): Promise<Product[]> {
 export async function fetchProductBySlug(
   slug: string
 ): Promise<Product | null> {
-  const supabase = await createServerSupabase();
+  const supabase = createAnonClient();
+  if (!supabase) return null;
   const { data, error } = await supabase
     .from("products")
     .select(
@@ -105,7 +116,8 @@ export async function fetchProductBySlug(
 export async function fetchProductsByCategory(
   categorySlug: string
 ): Promise<Product[]> {
-  const supabase = await createServerSupabase();
+  const supabase = createAnonClient();
+  if (!supabase) return [];
   const { data, error } = await supabase
     .from("products")
     .select(
@@ -123,7 +135,8 @@ export async function fetchRelatedProducts(
   excludeProductId: string,
   limit = 4
 ): Promise<Product[]> {
-  const supabase = await createServerSupabase();
+  const supabase = createAnonClient();
+  if (!supabase) return [];
   const { data, error } = await supabase
     .from("products")
     .select(
@@ -138,8 +151,6 @@ export async function fetchRelatedProducts(
   return data.map(rowToProduct);
 }
 
-// Build-time safe: usa el cliente anon (sin cookies()) porque
-// generateStaticParams corre fuera del request context.
 export async function fetchAllProductSlugs(): Promise<string[]> {
   const supabase = createAnonClient();
   if (!supabase) return [];
