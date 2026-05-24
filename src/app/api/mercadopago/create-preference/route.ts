@@ -173,13 +173,59 @@ export async function POST(request: Request) {
       sandboxInitPoint: preference.sandboxInitPoint,
     });
   } catch (e) {
-    console.error("Mercado Pago error:", e);
+    // Logging detallado para diagnosticar errores del SDK de Mercado Pago.
+    // El SDK suele tirar un Error con la respuesta de la API anidada en
+    // `cause` o en propiedades como `status`/`message`. Volcamos todo lo
+    // que podamos para que aparezca legible en Vercel logs.
+    const err = e as {
+      name?: string;
+      message?: string;
+      status?: number;
+      cause?: unknown;
+      stack?: string;
+    };
+
+    console.error("[MP create-preference] ❌ falló createPreference");
+    console.error("  order:", {
+      id: order.id,
+      order_number: order.order_number,
+      total: order.total,
+      itemsCount: items.length,
+    });
+    console.error("  error.name:", err.name);
+    console.error("  error.message:", err.message);
+    console.error("  error.status:", err.status);
+    console.error("  error.cause:", err.cause);
+    // JSON.stringify con replacer captura props no-enumerables como las que
+    // mete el SDK (response, config, etc.).
+    try {
+      console.error(
+        "  error (full):",
+        JSON.stringify(
+          e,
+          Object.getOwnPropertyNames(e as object),
+          2
+        )
+      );
+    } catch {
+      console.error("  error (raw):", e);
+    }
+    if (err.stack) console.error("  stack:", err.stack);
+
     await supabase
       .from("orders")
       .update({ status: "cancelled" })
       .eq("id", order.id);
     return NextResponse.json(
-      { error: "No se pudo iniciar el pago" },
+      {
+        error: "No se pudo iniciar el pago",
+        // Solo expongo detalles al cliente fuera de producción para no
+        // filtrar tokens/PII si el mensaje de MP los incluye.
+        ...(process.env.NODE_ENV !== "production" && {
+          detail: err.message,
+          status: err.status,
+        }),
+      },
       { status: 502 }
     );
   }
