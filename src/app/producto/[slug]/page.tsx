@@ -6,10 +6,15 @@ import { Footer } from "@/components/tienda/footer";
 import { Container, SectionHeader } from "@/components/ui/container";
 import { ProductDetail } from "@/components/tienda/product-detail";
 import { ProductCard } from "@/components/tienda/product-card";
-import { getProductBySlug, products } from "@/data/products";
+import {
+  fetchAllProductSlugs,
+  fetchProductBySlug,
+  fetchRelatedProducts,
+} from "@/lib/supabase/queries";
 
-export function generateStaticParams() {
-  return products.map((p) => ({ slug: p.slug }));
+export async function generateStaticParams() {
+  const slugs = await fetchAllProductSlugs();
+  return slugs.map((slug) => ({ slug }));
 }
 
 export async function generateMetadata({
@@ -18,7 +23,7 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const product = getProductBySlug(slug);
+  const product = await fetchProductBySlug(slug);
   if (!product)
     return { title: "Producto no encontrado — Artesanías Melanie" };
   return {
@@ -33,14 +38,10 @@ export default async function ProductoPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const product = getProductBySlug(slug);
+  const product = await fetchProductBySlug(slug);
   if (!product) notFound();
 
-  const related = products
-    .filter(
-      (p) => p.category === product.category && p.id !== product.id
-    )
-    .slice(0, 4);
+  const related = await fetchRelatedProducts(product.category, product.id);
 
   return (
     <>

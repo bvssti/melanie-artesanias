@@ -6,7 +6,7 @@ import { Footer } from "@/components/tienda/footer";
 import { Container } from "@/components/ui/container";
 import { CatalogGrid } from "@/components/tienda/catalog-grid";
 import { categories, getCategory } from "@/data/categories";
-import { getProductsByCategory } from "@/data/products";
+import { fetchProductsByCategory } from "@/lib/supabase/queries";
 
 export function generateStaticParams() {
   return categories.map((c) => ({ categoria: c.slug }));
@@ -41,7 +41,7 @@ export default async function CategoriaPage({
   const cat = getCategory(categoria);
   if (!cat) notFound();
 
-  const items = getProductsByCategory(cat.slug);
+  const items = await fetchProductsByCategory(cat.slug);
 
   return (
     <>

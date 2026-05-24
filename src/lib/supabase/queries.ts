@@ -117,3 +117,33 @@ export async function fetchProductsByCategory(
   if (error || !data) return [];
   return data.map(rowToProduct);
 }
+
+export async function fetchRelatedProducts(
+  categorySlug: string,
+  excludeProductId: string,
+  limit = 4
+): Promise<Product[]> {
+  const supabase = await createServerSupabase();
+  const { data, error } = await supabase
+    .from("products")
+    .select(
+      "id, slug, name, description, details, price, stock, category_label, color, type, badge, images, featured, categories!inner(slug)"
+    )
+    .eq("published", true)
+    .eq("categories.slug", categorySlug)
+    .neq("id", excludeProductId)
+    .order("created_at", { ascending: false })
+    .limit(limit);
+  if (error || !data) return [];
+  return data.map(rowToProduct);
+}
+
+export async function fetchAllProductSlugs(): Promise<string[]> {
+  const supabase = await createServerSupabase();
+  const { data, error } = await supabase
+    .from("products")
+    .select("slug")
+    .eq("published", true);
+  if (error || !data) return [];
+  return data.map((r) => r.slug);
+}

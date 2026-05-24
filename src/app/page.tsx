@@ -9,10 +9,11 @@ import { CategoryCard } from "@/components/tienda/category-card";
 import { ProductCard } from "@/components/tienda/product-card";
 import { AmigurumiIcon } from "@/components/tienda/category-icons";
 import { categories } from "@/data/categories";
-import { getFeaturedProducts } from "@/data/products";
+import { fetchFeaturedProducts } from "@/lib/supabase/queries";
+import type { Product } from "@/data/products";
 
-export default function HomePage() {
-  const featured = getFeaturedProducts().slice(0, 6);
+export default async function HomePage() {
+  const featured = await fetchFeaturedProducts();
   return (
     <>
       <Navbar />
@@ -126,11 +127,7 @@ function CategoriesSection() {
 }
 
 /* ---------------- FEATURED ---------------- */
-function FeaturedSection({
-  products,
-}: {
-  products: ReturnType<typeof getFeaturedProducts>;
-}) {
+function FeaturedSection({ products }: { products: Product[] }) {
   return (
     <section id="productos" className="py-20">
       <Container>

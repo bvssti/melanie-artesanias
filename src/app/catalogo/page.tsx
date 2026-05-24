@@ -2,7 +2,7 @@ import { Navbar } from "@/components/tienda/navbar";
 import { Footer } from "@/components/tienda/footer";
 import { Container } from "@/components/ui/container";
 import { CatalogGrid } from "@/components/tienda/catalog-grid";
-import { products } from "@/data/products";
+import { fetchProducts } from "@/lib/supabase/queries";
 
 export const metadata = {
   title: "Catálogo — Artesanías Melanie",
@@ -10,7 +10,8 @@ export const metadata = {
     "Todos los amigurumis, patrones y agendas personalizadas disponibles ahora.",
 };
 
-export default function CatalogoPage() {
+export default async function CatalogoPage() {
+  const products = await fetchProducts();
   return (
     <>
       <Navbar />
