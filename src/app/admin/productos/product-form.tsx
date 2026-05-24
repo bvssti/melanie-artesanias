@@ -281,7 +281,7 @@ export function ProductForm({ product, categories }: ProductFormProps) {
             <input
               type="checkbox"
               name="published"
-              defaultChecked={initial.published}
+              defaultChecked={initial.published === "on"}
               className="w-4 h-4 accent-accent"
             />
             <span className="text-sm">Publicado (visible en la tienda)</span>
@@ -290,7 +290,7 @@ export function ProductForm({ product, categories }: ProductFormProps) {
             <input
               type="checkbox"
               name="featured"
-              defaultChecked={initial.featured}
+              defaultChecked={initial.featured === "on"}
               className="w-4 h-4 accent-accent"
             />
             <span className="text-sm">Destacado en la home</span>
