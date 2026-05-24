@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell($env:Path = [System.Environment]::GetEnvironmentVariable\\('Path','Machine'\\) + ';' + [System.Environment]::GetEnvironmentVariable\\('Path','User'\\); Set-Location web; npm install zustand lucide-react clsx tailwind-merge class-variance-authority @radix-ui/react-slot 2>&1 | Select-Object -Last 10)",
+      "Bash(taskkill //F //IM node.exe)",
+      "mcp__Claude_Preview__preview_start",
+      "Bash(curl -sS -o /tmp/home.html -w \"HTTP: %{http_code} | Size: %{size_download}\\\\n\" http://localhost:3000/)",
+      "Bash(grep -oE '<title>[^<]+|Hecho con|amigurumis|Sé el primero|Artesanías Melanie' /tmp/home.html 2>&1 | head -10)",
+      "PowerShell(Start-Process \"http://localhost:3000\")",
+      "Bash(curl -sS -o /dev/null -w \"HTTP %{http_code}\\\\n\" --max-time 3 http://localhost:3000/)"
+    ]
+  }
+}

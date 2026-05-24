@@ -1,0 +1,79 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@theme {
+  --color-bg: #FFFBEB;
+  --color-bg-card: #FFFFFF;
+  --color-primary: #78716C;
+  --color-primary-hover: #5F5853;
+  --color-secondary: #A8A29E;
+  --color-accent: #D97706;
+  --color-accent-hover: #B96305;
+  --color-accent-soft: #F8E0CB;
+  --color-foreground: #2C2620;
+  --color-foreground-soft: #5A5048;
+  --color-muted: #F6F2EA;
+  --color-border: #EEE7DA;
+
+  --color-pastel-rose: #F4D4D4;
+  --color-pastel-rose-deep: #E5B8B8;
+  --color-pastel-sage: #C7D4C0;
+  --color-pastel-sage-deep: #A8BBA0;
+  --color-pastel-lavender: #D9CFE0;
+  --color-pastel-lavender-deep: #BFAFCC;
+  --color-pastel-peach: #F8E0CB;
+
+  --color-success: #6B8E5A;
+  --color-warning: #D97706;
+  --color-destructive: #B45454;
+
+  --font-display: var(--font-amatic), cursive;
+  --font-sans: var(--font-cabin), system-ui, -apple-system, sans-serif;
+
+  --radius-sm: 10px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+
+  --shadow-sm: 0 1px 2px rgba(60, 40, 20, 0.04), 0 1px 3px rgba(60, 40, 20, 0.06);
+  --shadow-md: 0 4px 12px rgba(60, 40, 20, 0.06), 0 2px 4px rgba(60, 40, 20, 0.04);
+  --shadow-lg: 0 12px 32px rgba(60, 40, 20, 0.08), 0 4px 12px rgba(60, 40, 20, 0.06);
+
+  --ease-soft: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--color-bg);
+  color: var(--color-foreground);
+  font-family: var(--font-sans);
+  line-height: 1.6;
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Selection */
+::selection {
+  background: var(--color-accent-soft);
+  color: var(--color-foreground);
+}
+
+/* Focus visible base */
+*:focus-visible {
+  outline: 3px solid var(--color-accent);
+  outline-offset: 2px;
+  border-radius: 4px;
+}

@@ -1,0 +1,923 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Artesanías Melanie — Hecho con manos y corazón</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Amatic+SC:wght@400;700&family=Cabin:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #FFFBEB;
+    --bg-card: #FFFFFF;
+    --primary: #78716C;
+    --secondary: #A8A29E;
+    --accent: #D97706;
+    --accent-soft: #F8E0CB;
+    --foreground: #2C2620;
+    --foreground-soft: #5A5048;
+    --muted: #F6F2EA;
+    --border: #EEE7DA;
+
+    --pastel-rose: #F4D4D4;
+    --pastel-rose-deep: #E5B8B8;
+    --pastel-sage: #C7D4C0;
+    --pastel-sage-deep: #A8BBA0;
+    --pastel-lavender: #D9CFE0;
+    --pastel-lavender-deep: #BFAFCC;
+
+    --radius-sm: 10px;
+    --radius-md: 16px;
+    --radius-lg: 24px;
+    --shadow-sm: 0 1px 2px rgba(60, 40, 20, 0.04), 0 1px 3px rgba(60, 40, 20, 0.06);
+    --shadow-md: 0 4px 12px rgba(60, 40, 20, 0.06), 0 2px 4px rgba(60, 40, 20, 0.04);
+    --shadow-lg: 0 12px 32px rgba(60, 40, 20, 0.08), 0 4px 12px rgba(60, 40, 20, 0.06);
+
+    --t-150: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+    --t-250: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Cabin', system-ui, -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--foreground);
+    line-height: 1.6;
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+  }
+  img, svg { display: block; max-width: 100%; }
+  a { color: inherit; text-decoration: none; }
+  button { font-family: inherit; cursor: pointer; border: none; background: none; }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+  }
+
+  /* ---------- LAYOUT ---------- */
+  .container { width: 100%; max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+  @media (min-width: 768px) { .container { padding: 0 32px; } }
+
+  /* ---------- TYPOGRAPHY ---------- */
+  .display { font-family: 'Amatic SC', cursive; font-weight: 700; line-height: 1; letter-spacing: 0.5px; }
+  .h1 { font-size: clamp(56px, 9vw, 96px); }
+  .h2 { font-size: clamp(40px, 6vw, 64px); }
+  .h3 { font-size: 32px; }
+  .eyebrow {
+    font-family: 'Amatic SC', cursive;
+    font-weight: 700;
+    font-size: 28px;
+    color: var(--accent);
+    letter-spacing: 1.5px;
+  }
+  .lead { font-size: 18px; color: var(--foreground-soft); max-width: 60ch; }
+
+  /* ---------- BUTTONS ---------- */
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 14px 24px;
+    border-radius: 999px;
+    font-weight: 600; font-size: 15px;
+    transition: all var(--t-250);
+    min-height: 48px;
+    text-align: center; justify-content: center;
+  }
+  .btn:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+  .btn-primary {
+    background: var(--accent); color: white;
+    box-shadow: var(--shadow-md);
+  }
+  .btn-primary:hover { background: #B96305; transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+  .btn-primary:active { transform: translateY(0); }
+  .btn-secondary {
+    background: var(--bg-card); color: var(--foreground);
+    border: 1.5px solid var(--border);
+  }
+  .btn-secondary:hover { background: var(--muted); border-color: var(--secondary); }
+  .btn-ghost { padding: 8px 16px; min-height: 40px; }
+  .btn-ghost:hover { background: var(--muted); border-radius: 999px; }
+
+  /* ---------- NAVBAR ---------- */
+  .navbar {
+    position: sticky; top: 0; z-index: 50;
+    background: rgba(255, 251, 235, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-inner {
+    display: flex; align-items: center; justify-content: space-between;
+    height: 72px;
+  }
+  .logo { display: flex; align-items: center; gap: 10px; }
+  .logo-mark {
+    width: 40px; height: 40px;
+    background: var(--accent-soft);
+    border-radius: 50%;
+    display: grid; place-items: center;
+    color: var(--accent);
+  }
+  .logo-name { font-family: 'Amatic SC', cursive; font-weight: 700; font-size: 30px; color: var(--foreground); line-height: 1; }
+  .logo-tag { font-size: 11px; color: var(--secondary); letter-spacing: 1px; text-transform: uppercase; }
+  .nav-links { display: none; gap: 4px; align-items: center; }
+  .nav-links a { padding: 8px 16px; border-radius: 999px; font-weight: 500; color: var(--foreground-soft); transition: color var(--t-150), background var(--t-150); }
+  .nav-links a:hover { color: var(--foreground); background: var(--muted); }
+  .nav-actions { display: flex; align-items: center; gap: 8px; }
+  .icon-btn {
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    display: grid; place-items: center;
+    color: var(--foreground); position: relative;
+    transition: background var(--t-150);
+  }
+  .icon-btn:hover { background: var(--muted); }
+  .cart-badge {
+    position: absolute; top: 4px; right: 4px;
+    background: var(--accent); color: white;
+    font-size: 11px; font-weight: 700;
+    min-width: 18px; height: 18px; padding: 0 5px;
+    border-radius: 999px;
+    display: grid; place-items: center;
+  }
+  @media (min-width: 1024px) { .nav-links { display: flex; } }
+
+  /* ---------- HERO ---------- */
+  .hero {
+    padding: 64px 0 96px;
+    position: relative; overflow: hidden;
+  }
+  .hero-grid { display: grid; grid-template-columns: 1fr; gap: 48px; align-items: center; }
+  @media (min-width: 900px) { .hero-grid { grid-template-columns: 1.05fr 1fr; gap: 64px; } }
+  .hero-title { color: var(--foreground); margin: 16px 0 20px; }
+  .hero-title .accent { color: var(--accent); display: inline-block; transform: rotate(-2deg); }
+  .hero-cta { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 32px; }
+  .hero-stats { display: flex; gap: 32px; margin-top: 48px; flex-wrap: wrap; }
+  .hero-stat-num { font-family: 'Amatic SC', cursive; font-weight: 700; font-size: 48px; color: var(--accent); line-height: 1; }
+  .hero-stat-label { font-size: 13px; color: var(--secondary); text-transform: uppercase; letter-spacing: 1px; margin-top: 4px; }
+  .hero-visual {
+    position: relative; aspect-ratio: 1 / 1;
+    background: linear-gradient(135deg, var(--pastel-rose) 0%, var(--pastel-lavender) 100%);
+    border-radius: var(--radius-lg);
+    display: grid; place-items: center;
+    box-shadow: var(--shadow-lg);
+    overflow: hidden;
+  }
+  .hero-blob {
+    position: absolute; width: 70%; height: 70%;
+    background: radial-gradient(circle, var(--pastel-sage) 0%, transparent 70%);
+    border-radius: 50%; top: -10%; right: -15%;
+    opacity: 0.7;
+  }
+  .hero-card {
+    background: var(--bg-card);
+    border-radius: var(--radius-md);
+    padding: 24px;
+    box-shadow: var(--shadow-md);
+    width: 75%; text-align: center; position: relative; z-index: 1;
+  }
+  .hero-card-emoji-area {
+    width: 120px; height: 120px;
+    margin: 0 auto 16px;
+    background: var(--accent-soft);
+    border-radius: 50%;
+    display: grid; place-items: center;
+    color: var(--accent);
+  }
+
+  /* ---------- SECTION ---------- */
+  section { padding: 80px 0; }
+  .section-header { text-align: center; margin-bottom: 56px; }
+  .section-header .eyebrow { display: block; margin-bottom: 8px; }
+  .section-header .h2 { color: var(--foreground); }
+  .section-header .lead { margin: 16px auto 0; }
+
+  /* ---------- CATEGORIES ---------- */
+  .categories { background: var(--bg-card); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+  .cat-grid { display: grid; grid-template-columns: 1fr; gap: 24px; }
+  @media (min-width: 700px) { .cat-grid { grid-template-columns: repeat(3, 1fr); } }
+  .cat-card {
+    border-radius: var(--radius-lg);
+    padding: 40px 32px;
+    position: relative; overflow: hidden;
+    transition: transform var(--t-250), box-shadow var(--t-250);
+    box-shadow: var(--shadow-sm);
+    cursor: pointer;
+    display: block;
+  }
+  .cat-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+  .cat-card.rose { background: var(--pastel-rose); }
+  .cat-card.sage { background: var(--pastel-sage); }
+  .cat-card.lavender { background: var(--pastel-lavender); }
+  .cat-icon {
+    width: 64px; height: 64px;
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 20px;
+    display: grid; place-items: center;
+    color: var(--foreground); margin-bottom: 20px;
+  }
+  .cat-card .h3 { color: var(--foreground); font-family: 'Amatic SC', cursive; font-size: 40px; margin-bottom: 8px; }
+  .cat-card p { color: var(--foreground-soft); margin-bottom: 24px; }
+  .cat-link { display: inline-flex; align-items: center; gap: 6px; font-weight: 600; color: var(--foreground); }
+  .cat-link svg { transition: transform var(--t-150); }
+  .cat-card:hover .cat-link svg { transform: translateX(4px); }
+
+  /* ---------- PRODUCTS ---------- */
+  .products-head { display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 16px; margin-bottom: 40px; }
+  .filter-pills { display: flex; gap: 8px; flex-wrap: wrap; }
+  .pill {
+    padding: 8px 18px;
+    border-radius: 999px;
+    border: 1.5px solid var(--border);
+    background: var(--bg-card);
+    font-size: 14px; font-weight: 500;
+    color: var(--foreground-soft);
+    transition: all var(--t-150);
+    min-height: 40px;
+  }
+  .pill:hover { border-color: var(--secondary); color: var(--foreground); }
+  .pill.active { background: var(--foreground); color: var(--bg); border-color: var(--foreground); }
+  .product-grid {
+    display: grid; gap: 24px;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  }
+  .product-card {
+    background: var(--bg-card);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    transition: transform var(--t-250), box-shadow var(--t-250);
+    border: 1px solid var(--border);
+    display: flex; flex-direction: column;
+  }
+  .product-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); }
+  .product-img {
+    aspect-ratio: 1 / 1;
+    background: var(--muted);
+    position: relative;
+    display: grid; place-items: center;
+    color: var(--secondary);
+  }
+  .product-img.rose { background: var(--pastel-rose); color: var(--pastel-rose-deep); }
+  .product-img.sage { background: var(--pastel-sage); color: var(--pastel-sage-deep); }
+  .product-img.lavender { background: var(--pastel-lavender); color: var(--pastel-lavender-deep); }
+  .product-badge {
+    position: absolute; top: 12px; left: 12px;
+    background: var(--bg-card);
+    color: var(--foreground);
+    font-size: 11px; font-weight: 600;
+    padding: 4px 10px; border-radius: 999px;
+    letter-spacing: 0.5px; text-transform: uppercase;
+    box-shadow: var(--shadow-sm);
+  }
+  .product-fav {
+    position: absolute; top: 12px; right: 12px;
+    width: 36px; height: 36px;
+    background: var(--bg-card);
+    border-radius: 50%;
+    display: grid; place-items: center;
+    color: var(--foreground-soft);
+    box-shadow: var(--shadow-sm);
+    transition: color var(--t-150);
+  }
+  .product-fav:hover { color: var(--accent); }
+  .product-info { padding: 16px 18px 20px; flex: 1; display: flex; flex-direction: column; }
+  .product-cat { font-size: 12px; color: var(--secondary); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
+  .product-name { font-size: 16px; font-weight: 600; color: var(--foreground); margin-bottom: 12px; line-height: 1.3; }
+  .product-foot { display: flex; align-items: center; justify-content: space-between; margin-top: auto; gap: 12px; }
+  .product-price { font-size: 20px; font-weight: 700; color: var(--foreground); }
+  .product-stock { font-size: 12px; color: var(--pastel-sage-deep); display: inline-flex; align-items: center; gap: 4px; font-weight: 500; }
+  .product-stock.low { color: var(--accent); }
+  .product-stock.out { color: var(--secondary); }
+  .add-btn {
+    width: 40px; height: 40px;
+    background: var(--foreground);
+    color: var(--bg);
+    border-radius: 50%;
+    display: grid; place-items: center;
+    transition: all var(--t-150);
+  }
+  .add-btn:hover { background: var(--accent); transform: scale(1.05); }
+  .add-btn:disabled { background: var(--border); color: var(--secondary); cursor: not-allowed; }
+
+  /* ---------- ABOUT ---------- */
+  .about { background: linear-gradient(180deg, var(--bg) 0%, var(--muted) 100%); }
+  .about-grid { display: grid; grid-template-columns: 1fr; gap: 48px; align-items: center; }
+  @media (min-width: 900px) { .about-grid { grid-template-columns: 1fr 1.2fr; gap: 80px; } }
+  .about-visual {
+    position: relative; aspect-ratio: 4 / 5;
+    background: var(--pastel-sage);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-lg);
+    display: grid; place-items: center;
+    color: var(--pastel-sage-deep);
+  }
+  .about-tag {
+    position: absolute;
+    background: var(--bg-card);
+    padding: 12px 18px;
+    border-radius: var(--radius-md);
+    font-family: 'Amatic SC', cursive;
+    font-size: 32px;
+    box-shadow: var(--shadow-md);
+    transform: rotate(-4deg);
+  }
+  .about-tag.t1 { top: 32px; right: 32px; color: var(--accent); }
+  .about-tag.t2 { bottom: 32px; left: 32px; color: var(--pastel-lavender-deep); transform: rotate(4deg); }
+  .about-text p { margin-bottom: 16px; color: var(--foreground-soft); font-size: 17px; }
+  .about-text .h2 { margin: 8px 0 20px; }
+  .about-feats { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 32px; }
+  .feat { padding: 20px; background: var(--bg-card); border-radius: var(--radius-md); border: 1px solid var(--border); }
+  .feat-icon { width: 40px; height: 40px; background: var(--accent-soft); border-radius: 12px; display: grid; place-items: center; color: var(--accent); margin-bottom: 12px; }
+  .feat-title { font-weight: 700; margin-bottom: 4px; }
+  .feat-desc { font-size: 14px; color: var(--foreground-soft); }
+
+  /* ---------- TESTIMONIALS ---------- */
+  .test-grid { display: grid; grid-template-columns: 1fr; gap: 20px; }
+  @media (min-width: 700px) { .test-grid { grid-template-columns: repeat(3, 1fr); } }
+  .test-card {
+    background: var(--bg-card);
+    border-radius: var(--radius-md);
+    padding: 28px;
+    border: 1px solid var(--border);
+    position: relative;
+  }
+  .test-stars { color: var(--accent); display: flex; gap: 2px; margin-bottom: 12px; }
+  .test-quote { color: var(--foreground); font-size: 16px; line-height: 1.7; margin-bottom: 20px; }
+  .test-author { display: flex; align-items: center; gap: 12px; }
+  .test-avatar { width: 44px; height: 44px; border-radius: 50%; background: var(--pastel-lavender); display: grid; place-items: center; font-weight: 700; color: var(--pastel-lavender-deep); font-family: 'Amatic SC', cursive; font-size: 24px; }
+  .test-name { font-weight: 600; }
+  .test-loc { font-size: 13px; color: var(--secondary); }
+
+  /* ---------- CTA ---------- */
+  .cta-section { padding: 96px 0; }
+  .cta-box {
+    background: linear-gradient(135deg, var(--pastel-rose) 0%, var(--accent-soft) 100%);
+    border-radius: var(--radius-lg);
+    padding: 64px 32px;
+    text-align: center;
+    position: relative; overflow: hidden;
+    box-shadow: var(--shadow-md);
+  }
+  .cta-box .h2 { color: var(--foreground); }
+  .cta-box .lead { margin: 16px auto 32px; color: var(--foreground-soft); }
+  .cta-form { display: flex; gap: 8px; max-width: 480px; margin: 0 auto; flex-wrap: wrap; justify-content: center; }
+  .cta-input {
+    flex: 1; min-width: 240px;
+    padding: 14px 20px;
+    border-radius: 999px;
+    border: 1.5px solid var(--border);
+    background: var(--bg-card);
+    font-family: inherit; font-size: 15px;
+    min-height: 48px;
+    color: var(--foreground);
+  }
+  .cta-input:focus { outline: 3px solid var(--accent); outline-offset: 2px; border-color: var(--accent); }
+
+  /* ---------- FOOTER ---------- */
+  footer {
+    background: var(--foreground); color: #E5E0D7;
+    padding: 64px 0 32px;
+  }
+  .foot-grid {
+    display: grid; gap: 40px;
+    grid-template-columns: 1fr;
+  }
+  @media (min-width: 700px) { .foot-grid { grid-template-columns: 1.5fr 1fr 1fr 1fr; } }
+  .foot-logo-name { color: white; font-family: 'Amatic SC', cursive; font-size: 32px; }
+  .foot-logo-tag { color: var(--secondary); font-size: 12px; letter-spacing: 1px; text-transform: uppercase; }
+  .foot-desc { margin-top: 16px; color: #B8B0A3; font-size: 14px; max-width: 30ch; }
+  .foot-socials { display: flex; gap: 10px; margin-top: 20px; }
+  .foot-social {
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.06);
+    display: grid; place-items: center;
+    color: #E5E0D7;
+    transition: background var(--t-150);
+  }
+  .foot-social:hover { background: var(--accent); color: white; }
+  .foot-title { font-weight: 700; color: white; margin-bottom: 16px; font-size: 14px; text-transform: uppercase; letter-spacing: 1.5px; }
+  .foot-links { display: flex; flex-direction: column; gap: 10px; }
+  .foot-links a { color: #B8B0A3; font-size: 14px; transition: color var(--t-150); }
+  .foot-links a:hover { color: white; }
+  .foot-bottom {
+    margin-top: 48px; padding-top: 24px;
+    border-top: 1px solid rgba(255,255,255,0.08);
+    display: flex; justify-content: space-between; flex-wrap: wrap; gap: 16px;
+    font-size: 13px; color: #8A8278;
+  }
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<header class="navbar">
+  <div class="container nav-inner">
+    <a href="#" class="logo">
+      <div class="logo-mark" aria-hidden="true">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+      </div>
+      <div>
+        <div class="logo-name">Artesanías Melanie</div>
+        <div class="logo-tag">Hecho a mano</div>
+      </div>
+    </a>
+    <nav class="nav-links" aria-label="Principal">
+      <a href="#inicio">Inicio</a>
+      <a href="#categorias">Categorías</a>
+      <a href="#productos">Productos</a>
+      <a href="#sobre">Sobre Melanie</a>
+      <a href="#contacto">Contacto</a>
+    </nav>
+    <div class="nav-actions">
+      <button class="icon-btn" aria-label="Buscar">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+      </button>
+      <button class="icon-btn" aria-label="Carrito (2 productos)">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg>
+        <span class="cart-badge">2</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero" id="inicio">
+  <div class="container hero-grid">
+    <div>
+      <span class="eyebrow">Pequeño taller — grandes detalles</span>
+      <h1 class="display h1 hero-title">
+        Hecho con <span class="accent">manos</span><br/>
+        y corazón
+      </h1>
+      <p class="lead">
+        Amigurumis tejidos uno por uno, patrones para que tú también crees, y agendas personalizadas con cariño. Cada pieza es única, así como tú.
+      </p>
+      <div class="hero-cta">
+        <a href="#productos" class="btn btn-primary">
+          Ver catálogo
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+        <a href="#sobre" class="btn btn-secondary">Conocer la historia</a>
+      </div>
+      <div class="hero-stats" aria-label="Estadísticas del taller">
+        <div>
+          <div class="hero-stat-num">+250</div>
+          <div class="hero-stat-label">Piezas creadas</div>
+        </div>
+        <div>
+          <div class="hero-stat-num">+180</div>
+          <div class="hero-stat-label">Clientes felices</div>
+        </div>
+        <div>
+          <div class="hero-stat-num">3</div>
+          <div class="hero-stat-label">Años tejiendo</div>
+        </div>
+      </div>
+    </div>
+    <div class="hero-visual" aria-hidden="true">
+      <div class="hero-blob"></div>
+      <div class="hero-card">
+        <div class="hero-card-emoji-area">
+          <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21a9 9 0 0 0 9-9c0-2.4-1-4.5-2.5-6"/><path d="M12 3a9 9 0 0 0-9 9c0 2.4 1 4.5 2.5 6"/><circle cx="12" cy="12" r="4"/><path d="M8 8l-2-2M16 8l2-2M8 16l-2 2M16 16l2 2"/></svg>
+        </div>
+        <div style="font-family:'Amatic SC',cursive; font-size:36px; color:var(--foreground); line-height:1;">Pequeños tesoros</div>
+        <div style="margin-top:8px; color:var(--foreground-soft); font-size:14px;">hechos con paciencia y cariño</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CATEGORIES -->
+<section class="categories" id="categorias">
+  <div class="container">
+    <div class="section-header">
+      <span class="eyebrow">Explora por categoría</span>
+      <h2 class="display h2">¿Qué andas buscando?</h2>
+    </div>
+    <div class="cat-grid">
+      <a href="#" class="cat-card rose">
+        <div class="cat-icon" aria-hidden="true">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="10" r="6"/><path d="M9 16l-2 5M15 16l2 5M9 9h.01M15 9h.01M9.5 12c.83.67 2.17.67 3 0"/></svg>
+        </div>
+        <h3 class="h3">Amigurumis</h3>
+        <p>Personajes tejidos a crochet, suaves y abrazables. Cada uno con su personalidad.</p>
+        <span class="cat-link">
+          Ver colección
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </span>
+      </a>
+      <a href="#" class="cat-card sage">
+        <div class="cat-icon" aria-hidden="true">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="15" y2="17"/></svg>
+        </div>
+        <h3 class="h3">Patrones</h3>
+        <p>Instrucciones paso a paso en PDF para que tú también puedas crear tus propios amigurumis.</p>
+        <span class="cat-link">
+          Ver patrones
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </span>
+      </a>
+      <a href="#" class="cat-card lavender">
+        <div class="cat-icon" aria-hidden="true">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h12a4 4 0 0 1 4 4v12a0 0 0 0 1 0 0H8a4 4 0 0 1-4-4V4z"/><path d="M8 2v4M16 2v4M4 10h16"/></svg>
+        </div>
+        <h3 class="h3">Agendas</h3>
+        <p>Agendas y libretas personalizadas, decoradas a mano. Tu nombre, tus colores, tu estilo.</p>
+        <span class="cat-link">
+          Ver agendas
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- PRODUCTS -->
+<section id="productos">
+  <div class="container">
+    <div class="section-header">
+      <span class="eyebrow">Recién salidos del taller</span>
+      <h2 class="display h2">Lo más reciente</h2>
+      <p class="lead">Productos disponibles ahora. Stock limitado — son piezas únicas.</p>
+    </div>
+
+    <div class="products-head">
+      <div class="filter-pills" role="tablist" aria-label="Filtrar productos">
+        <button class="pill active" role="tab" aria-selected="true">Todos</button>
+        <button class="pill" role="tab">Amigurumis</button>
+        <button class="pill" role="tab">Patrones</button>
+        <button class="pill" role="tab">Agendas</button>
+      </div>
+      <button class="btn btn-ghost" style="color:var(--foreground-soft); font-size:14px;">
+        Ver todo el catálogo
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </button>
+    </div>
+
+    <div class="product-grid">
+
+      <article class="product-card">
+        <div class="product-img rose">
+          <span class="product-badge">Nuevo</span>
+          <button class="product-fav" aria-label="Guardar como favorito">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          </button>
+          <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="10" r="6"/><path d="M9 16l-2 5M15 16l2 5M9 9h.01M15 9h.01M9.5 12c.83.67 2.17.67 3 0"/></svg>
+        </div>
+        <div class="product-info">
+          <div class="product-cat">Amigurumi</div>
+          <div class="product-name">Conejito Pastel "Tomás"</div>
+          <div class="product-foot">
+            <div>
+              <div class="product-price">$18.500</div>
+              <div class="product-stock"><span style="width:6px;height:6px;background:currentColor;border-radius:50%;"></span> 3 disponibles</div>
+            </div>
+            <button class="add-btn" aria-label="Agregar al carrito">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+            </button>
+          </div>
+        </div>
+      </article>
+
+      <article class="product-card">
+        <div class="product-img sage">
+          <span class="product-badge">PDF</span>
+          <button class="product-fav" aria-label="Guardar como favorito">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          </button>
+          <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="15" y2="17"/></svg>
+        </div>
+        <div class="product-info">
+          <div class="product-cat">Patrón digital</div>
+          <div class="product-name">Patrón Osito "Pancho" — Principiante</div>
+          <div class="product-foot">
+            <div>
+              <div class="product-price">$4.900</div>
+              <div class="product-stock"><span style="width:6px;height:6px;background:currentColor;border-radius:50%;"></span> Descarga inmediata</div>
+            </div>
+            <button class="add-btn" aria-label="Agregar al carrito">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+            </button>
+          </div>
+        </div>
+      </article>
+
+      <article class="product-card">
+        <div class="product-img lavender">
+          <span class="product-badge">Personalizable</span>
+          <button class="product-fav" aria-label="Guardar como favorito">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          </button>
+          <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h12a4 4 0 0 1 4 4v12a0 0 0 0 1 0 0H8a4 4 0 0 1-4-4V4z"/><path d="M8 2v4M16 2v4M4 10h16"/></svg>
+        </div>
+        <div class="product-info">
+          <div class="product-cat">Agenda</div>
+          <div class="product-name">Agenda 2026 con tu nombre</div>
+          <div class="product-foot">
+            <div>
+              <div class="product-price">$14.900</div>
+              <div class="product-stock low"><span style="width:6px;height:6px;background:currentColor;border-radius:50%;"></span> Quedan 2</div>
+            </div>
+            <button class="add-btn" aria-label="Agregar al carrito">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+            </button>
+          </div>
+        </div>
+      </article>
+
+      <article class="product-card">
+        <div class="product-img sage">
+          <span class="product-badge">Destacado</span>
+          <button class="product-fav" aria-label="Guardar como favorito">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          </button>
+          <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="10" r="6"/><path d="M9 16l-2 5M15 16l2 5M9 9h.01M15 9h.01M9.5 12c.83.67 2.17.67 3 0"/></svg>
+        </div>
+        <div class="product-info">
+          <div class="product-cat">Amigurumi</div>
+          <div class="product-name">Gatito durmiente "Luna"</div>
+          <div class="product-foot">
+            <div>
+              <div class="product-price">$21.000</div>
+              <div class="product-stock"><span style="width:6px;height:6px;background:currentColor;border-radius:50%;"></span> 5 disponibles</div>
+            </div>
+            <button class="add-btn" aria-label="Agregar al carrito">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+            </button>
+          </div>
+        </div>
+      </article>
+
+      <article class="product-card">
+        <div class="product-img rose">
+          <span class="product-badge">Pack ahorro</span>
+          <button class="product-fav" aria-label="Guardar como favorito">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          </button>
+          <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        </div>
+        <div class="product-info">
+          <div class="product-cat">Patrones digitales</div>
+          <div class="product-name">Pack 3 patrones "Familia bosque"</div>
+          <div class="product-foot">
+            <div>
+              <div class="product-price">$11.900</div>
+              <div class="product-stock"><span style="width:6px;height:6px;background:currentColor;border-radius:50%;"></span> Descarga inmediata</div>
+            </div>
+            <button class="add-btn" aria-label="Agregar al carrito">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+            </button>
+          </div>
+        </div>
+      </article>
+
+      <article class="product-card">
+        <div class="product-img lavender">
+          <button class="product-fav" aria-label="Guardar como favorito">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          </button>
+          <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h12a4 4 0 0 1 4 4v12a0 0 0 0 1 0 0H8a4 4 0 0 1-4-4V4z"/><path d="M8 2v4M16 2v4M4 10h16"/></svg>
+        </div>
+        <div class="product-info">
+          <div class="product-cat">Libreta</div>
+          <div class="product-name">Libreta pocket pastel — Tapa dura</div>
+          <div class="product-foot">
+            <div>
+              <div class="product-price">$8.500</div>
+              <div class="product-stock out"><span style="width:6px;height:6px;background:currentColor;border-radius:50%;"></span> Agotado</div>
+            </div>
+            <button class="add-btn" disabled aria-label="Producto agotado">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
+            </button>
+          </div>
+        </div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="about" id="sobre">
+  <div class="container about-grid">
+    <div class="about-visual" aria-hidden="true">
+      <svg width="120" height="120" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      <div class="about-tag t1">Tejido a mano</div>
+      <div class="about-tag t2">Con amor desde 2022</div>
+    </div>
+    <div class="about-text">
+      <span class="eyebrow">Hola, soy Melanie</span>
+      <h2 class="display h2">Cada pieza<br/>tiene una historia</h2>
+      <p>Empecé tejiendo amigurumis para regalar a mi familia y, sin darme cuenta, mi pasatiempo se convirtió en un pequeño taller donde cada puntada lleva tiempo, paciencia y mucho cariño.</p>
+      <p>Hoy comparto contigo lo que más me gusta hacer: piezas únicas, patrones para que tú también te animes a crear, y agendas personalizadas que cuentan tu propia historia.</p>
+      <div class="about-feats">
+        <div class="feat">
+          <div class="feat-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          </div>
+          <div class="feat-title">Hecho a mano</div>
+          <div class="feat-desc">Cada pieza es única, tejida una a una</div>
+        </div>
+        <div class="feat">
+          <div class="feat-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          </div>
+          <div class="feat-title">Envíos a todo el país</div>
+          <div class="feat-desc">Despacho cuidado por Starken o Chilexpress</div>
+        </div>
+        <div class="feat">
+          <div class="feat-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+          </div>
+          <div class="feat-title">Materiales suaves</div>
+          <div class="feat-desc">Algodón e hilos hipoalergénicos</div>
+        </div>
+        <div class="feat">
+          <div class="feat-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/></svg>
+          </div>
+          <div class="feat-title">Personalizable</div>
+          <div class="feat-desc">Dime tu idea y la hacemos posible</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section>
+  <div class="container">
+    <div class="section-header">
+      <span class="eyebrow">Lo que dicen</span>
+      <h2 class="display h2">Cariño de clientes reales</h2>
+    </div>
+    <div class="test-grid">
+      <div class="test-card">
+        <div class="test-stars" aria-label="5 de 5 estrellas">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        </div>
+        <p class="test-quote">"El conejito que me llegó es hermoso, mucho más bonito que en las fotos. Se nota el cariño en cada detalle."</p>
+        <div class="test-author">
+          <div class="test-avatar">C</div>
+          <div>
+            <div class="test-name">Camila R.</div>
+            <div class="test-loc">Santiago</div>
+          </div>
+        </div>
+      </div>
+      <div class="test-card">
+        <div class="test-stars" aria-label="5 de 5 estrellas">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        </div>
+        <p class="test-quote">"Compré el patrón del osito y son las instrucciones más claras que he visto. Logré terminar mi primer amigurumi gracias a Melanie."</p>
+        <div class="test-author">
+          <div class="test-avatar">V</div>
+          <div>
+            <div class="test-name">Valentina M.</div>
+            <div class="test-loc">Valparaíso</div>
+          </div>
+        </div>
+      </div>
+      <div class="test-card">
+        <div class="test-stars" aria-label="5 de 5 estrellas">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        </div>
+        <p class="test-quote">"Mi agenda personalizada quedó increíble, justo como la pedí. La entrega fue rapidísima y muy bien empaquetada."</p>
+        <div class="test-author">
+          <div class="test-avatar">J</div>
+          <div>
+            <div class="test-name">Javiera P.</div>
+            <div class="test-loc">Concepción</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="container">
+    <div class="cta-box">
+      <span class="eyebrow">No te pierdas las novedades</span>
+      <h2 class="display h2">Sé el primero en saber</h2>
+      <p class="lead">Suscríbete y recibe avisos cuando agregue nuevos amigurumis, patrones o promos pequeñitas.</p>
+      <form class="cta-form" onsubmit="event.preventDefault(); alert('¡Gracias! En el sitio real esto te suscribirá.');">
+        <label for="email-cta" style="position:absolute;left:-9999px;">Email</label>
+        <input id="email-cta" type="email" class="cta-input" placeholder="tu@correo.com" required>
+        <button type="submit" class="btn btn-primary">Suscribirme</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer id="contacto">
+  <div class="container">
+    <div class="foot-grid">
+      <div>
+        <div class="foot-logo-name">Artesanías Melanie</div>
+        <div class="foot-logo-tag">Hecho a mano · Con amor</div>
+        <p class="foot-desc">Pequeño taller artesanal de amigurumis, patrones y agendas personalizadas.</p>
+        <div class="foot-socials">
+          <a class="foot-social" href="#" aria-label="WhatsApp">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.5 14.4c-.3-.1-1.8-.9-2-1s-.5-.1-.7.1-.8 1-1 1.2-.4.2-.6.1c-.9-.4-1.7-1-2.4-1.7s-1.3-1.5-1.7-2.4c-.1-.2-.1-.4.1-.5l.4-.5c.1-.1.2-.3.2-.5s.1-.3 0-.5-.6-1.6-.9-2.2c-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4S6 7.8 6 9.3s1.1 3 1.2 3.2c.1.2 2.1 3.3 5.2 4.5.7.3 1.3.5 1.7.6.7.2 1.4.2 1.9.1.6-.1 1.8-.7 2-1.4.3-.7.3-1.3.2-1.4-.1-.2-.4-.3-.7-.5zM12 2C6.5 2 2 6.5 2 12c0 1.8.5 3.5 1.3 5L2 22l5.1-1.3c1.5.8 3.2 1.3 4.9 1.3 5.5 0 10-4.5 10-10S17.5 2 12 2z"/></svg>
+          </a>
+          <a class="foot-social" href="#" aria-label="Instagram">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+          </a>
+          <a class="foot-social" href="#" aria-label="TikTok">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12.5 2h3.1c.2 1.5 1 2.8 2.2 3.7 1 .8 2.3 1.3 3.7 1.3v3.1c-1.5 0-2.9-.4-4.2-1v6.6c0 4-3.2 7.2-7.2 7.2S3 19.7 3 15.7s3.2-7.2 7.2-7.2v3.1c-2.3 0-4.1 1.9-4.1 4.1s1.9 4.1 4.1 4.1 4.1-1.9 4.1-4.1V2h-1.8z"/></svg>
+          </a>
+          <a class="foot-social" href="#" aria-label="Email">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          </a>
+        </div>
+      </div>
+      <div>
+        <div class="foot-title">Tienda</div>
+        <div class="foot-links">
+          <a href="#">Amigurumis</a>
+          <a href="#">Patrones</a>
+          <a href="#">Agendas</a>
+          <a href="#">Novedades</a>
+        </div>
+      </div>
+      <div>
+        <div class="foot-title">Ayuda</div>
+        <div class="foot-links">
+          <a href="#">Envíos</a>
+          <a href="#">Cambios</a>
+          <a href="#">Preguntas frecuentes</a>
+          <a href="#">Contacto</a>
+        </div>
+      </div>
+      <div>
+        <div class="foot-title">Sobre</div>
+        <div class="foot-links">
+          <a href="#">La historia</a>
+          <a href="#">El taller</a>
+          <a href="#">Materiales</a>
+          <a href="#">Términos</a>
+        </div>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <div>© 2026 Artesanías Melanie. Todos los derechos reservados.</div>
+      <div>Hecho con cariño en Chile</div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Filter pills behavior (demo only)
+  document.querySelectorAll('.pill').forEach(pill => {
+    pill.addEventListener('click', () => {
+      document.querySelectorAll('.pill').forEach(p => { p.classList.remove('active'); p.setAttribute('aria-selected', 'false'); });
+      pill.classList.add('active');
+      pill.setAttribute('aria-selected', 'true');
+    });
+  });
+
+  // Cart badge increment on add-to-cart
+  const cartBadge = document.querySelector('.cart-badge');
+  document.querySelectorAll('.add-btn:not(:disabled)').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const n = parseInt(cartBadge.textContent || '0', 10) + 1;
+      cartBadge.textContent = n;
+      btn.style.transform = 'scale(1.2)';
+      setTimeout(() => { btn.style.transform = ''; }, 200);
+    });
+  });
+
+  // Favorite toggle
+  document.querySelectorAll('.product-fav').forEach(fav => {
+    fav.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const svg = fav.querySelector('svg');
+      const filled = svg.getAttribute('fill') === 'currentColor';
+      svg.setAttribute('fill', filled ? 'none' : 'currentColor');
+      fav.style.color = filled ? 'var(--foreground-soft)' : 'var(--accent)';
+    });
+  });
+</script>
+
+</body>
+</html>
