@@ -1,6 +1,6 @@
 // Capa de acceso a datos contra Supabase.
 // Las pages la consumen para no tocar el cliente directamente.
-import { createServerSupabase } from "./server";
+import { createAnonClient, createServerSupabase } from "./server";
 import type { CategoryColor, ProductType } from "./types";
 import type { Product } from "@/data/products";
 import type { Category } from "@/data/categories";
@@ -138,8 +138,11 @@ export async function fetchRelatedProducts(
   return data.map(rowToProduct);
 }
 
+// Build-time safe: usa el cliente anon (sin cookies()) porque
+// generateStaticParams corre fuera del request context.
 export async function fetchAllProductSlugs(): Promise<string[]> {
-  const supabase = await createServerSupabase();
+  const supabase = createAnonClient();
+  if (!supabase) return [];
   const { data, error } = await supabase
     .from("products")
     .select("slug")

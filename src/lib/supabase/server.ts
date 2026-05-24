@@ -39,10 +39,30 @@ export async function createServerSupabase() {
   );
 }
 
-// Cliente con service-role para operaciones administrativas (webhooks, server actions
-// que necesiten bypass RLS). NUNCA exponer en el cliente.
 import { createClient } from "@supabase/supabase-js";
 
+// Cliente anónimo SIN cookies — apto para contextos donde `cookies()` no se
+// puede llamar (generateStaticParams, generateMetadata en build estático,
+// scripts). Sigue respetando RLS, así que solo lee lo que la policy
+// "public read" permite. NO sirve para detectar sesión de usuario.
+export function createAnonClient() {
+  if (
+    !process.env.NEXT_PUBLIC_SUPABASE_URL ||
+    !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+  ) {
+    return null;
+  }
+  return createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+    {
+      auth: { persistSession: false, autoRefreshToken: false },
+    }
+  );
+}
+
+// Cliente con service-role para operaciones administrativas (webhooks, server actions
+// que necesiten bypass RLS). NUNCA exponer en el cliente.
 export function createServiceClient() {
   if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
     throw new Error("SUPABASE_SERVICE_ROLE_KEY no está configurada");
