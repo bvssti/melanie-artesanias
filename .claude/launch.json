@@ -3,13 +3,8 @@
   "configurations": [
     {
       "name": "web",
-      "runtimeExecutable": "C:/Program Files/nodejs/node.exe",
-      "runtimeArgs": [
-        "web/node_modules/next/dist/bin/next",
-        "dev",
-        "--dir",
-        "web"
-      ],
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev"],
       "port": 3000
     }
   ]
