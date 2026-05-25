@@ -221,8 +221,13 @@ export function ProductForm({ product, categories }: ProductFormProps) {
         </Field>
       </Section>
 
-      <Section title="Precio y stock">
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <Section title={type === "digital" ? "Precio" : "Precio y stock"}>
+        <div
+          className={cn(
+            "grid gap-4 grid-cols-1",
+            type === "digital" ? "" : "sm:grid-cols-2"
+          )}
+        >
           <Field error={fieldErrors.price}>
             <Label htmlFor="price">Precio (CLP)</Label>
             <Input
@@ -237,22 +242,25 @@ export function ProductForm({ product, categories }: ProductFormProps) {
               aria-invalid={!!fieldErrors.price}
             />
           </Field>
-          <Field
-            error={fieldErrors.stock}
-            hint="Para digitales se ignora."
-          >
-            <Label htmlFor="stock">Stock</Label>
-            <Input
-              id="stock"
-              name="stock"
-              type="number"
-              min={0}
-              required
-              defaultValue={initial.stock || "0"}
-              placeholder="3"
-              aria-invalid={!!fieldErrors.stock}
-            />
-          </Field>
+          {type === "digital" ? (
+            // Producto digital → stock no aplica. Mandamos 0 oculto para que
+            // el schema (z.coerce.number().nonnegative()) acepte el form.
+            <input type="hidden" name="stock" value="0" />
+          ) : (
+            <Field error={fieldErrors.stock}>
+              <Label htmlFor="stock">Stock</Label>
+              <Input
+                id="stock"
+                name="stock"
+                type="number"
+                min={0}
+                required
+                defaultValue={initial.stock || "0"}
+                placeholder="3"
+                aria-invalid={!!fieldErrors.stock}
+              />
+            </Field>
+          )}
         </div>
       </Section>
 
